@@ -1,0 +1,2 @@
+C:/Users/NL/Desktop/c++_proj/MarchingCubes_OpenGL/VoxelRenderer/Src/vendor/glm/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/NL/Desktop/c++_proj/MarchingCubes_OpenGL/VoxelRenderer/Src/vendor/glm/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir

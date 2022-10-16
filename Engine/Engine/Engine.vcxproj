@@ -9,6 +9,8 @@
   <ItemGroup>
     <ClCompile Include="Src\App.cpp" />
     <ClCompile Include="Src\core\Application.cpp" />
+    <ClCompile Include="Src\lab1\gui_controls.cpp" />
+    <ClCompile Include="Src\lab1\Scene.cpp" />
     <ClCompile Include="Src\render\AssetRegistry.cpp" />
     <ClCompile Include="Src\engine\Time.cpp" />
     <ClCompile Include="Src\render\Camera.cpp" />
@@ -31,6 +33,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\core\Application.h" />
+    <ClInclude Include="Src\lab1\gui_controls.h" />
+    <ClInclude Include="Src\lab1\objects.h" />
+    <ClInclude Include="Src\lab1\Scene.h" />
     <ClInclude Include="Src\render\AssetRegistry.h" />
     <ClInclude Include="Src\engine\Log.h" />
     <ClInclude Include="Src\engine\Time.h" />
@@ -515,7 +520,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\GLFW\include;$(ProjectDir)Src\vendor\glad\include;$(ProjectDir)Src\vendor;$(ProjectDir)Src\core;$(ProjectDir)Src\engine;$(ProjectDir)Src\render;$(ProjectDir)Src\render\data;$(ProjectDir)Src\render\macros</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\GLFW\include;$(ProjectDir)Src\vendor\glad\include;$(ProjectDir)Src\vendor;$(ProjectDir)Src\core;$(ProjectDir)Src\engine;$(ProjectDir)Src\render;$(ProjectDir)Src\render\data;$(ProjectDir)Src\render\macros;$(ProjectDir)Src\lab1</AdditionalIncludeDirectories>
       <Optimization>MaxSpeed</Optimization>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <LanguageStandard>stdcpp17</LanguageStandard>

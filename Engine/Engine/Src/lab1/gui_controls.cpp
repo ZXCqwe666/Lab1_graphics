@@ -9,8 +9,8 @@
 void GUI_Controls::DrawGUI()
 {
     ImVec2 windowSize = { 350, 350 };
-    ImGui::SetNextWindowSize(windowSize);
-    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - windowSize.x, windowSize.y), ImGuiCond_Always, ImVec2(0.0f, 1.0f));
+    ImGui::SetNextWindowSize(windowSize, ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - windowSize.x, windowSize.y), ImGuiCond_Once, ImVec2(0.0f, 1.0f));
 
     ImGui::Begin("Debug");
     ImGui::Text("FPS : %i ", Time::displayFps);
@@ -86,6 +86,9 @@ void GUI_Controls::DrawGUI()
 
     #pragma endregion
     #pragma region edit
+
+    ImGui::SetNextWindowSize(windowSize, ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - 2 * windowSize.x, windowSize.y), ImGuiCond_Once, ImVec2(0.0f, 1.0f));
 
     ImGui::Begin("Edit");
     ImGui::Text("EDIT SHAPES :");

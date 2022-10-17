@@ -34,7 +34,7 @@ namespace rendering
 		float half_x = viewSize.x / 2.0f;
 		float half_y = viewSize.y / 2.0f;
 
-		proj_matrix = glm::ortho(-half_x, half_x, -half_y, half_y, -1.0f, 1000.0f);
+		proj_matrix = glm::ortho(-half_x, half_x, -half_y, half_y, -1.0f, 1.0f);
 		view_matrix = glm::translate(glm::mat4(1.0f), -position);
 		projection_view = proj_matrix * view_matrix;
 	}

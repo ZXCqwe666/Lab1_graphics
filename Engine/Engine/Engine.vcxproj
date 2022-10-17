@@ -9,6 +9,7 @@
   <ItemGroup>
     <ClCompile Include="Src\App.cpp" />
     <ClCompile Include="Src\core\Application.cpp" />
+    <ClCompile Include="Src\lab1\animation_data.cpp" />
     <ClCompile Include="Src\lab1\gui_controls.cpp" />
     <ClCompile Include="Src\lab1\Scene.cpp" />
     <ClCompile Include="Src\engine\Time.cpp" />
@@ -31,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\core\Application.h" />
+    <ClInclude Include="Src\lab1\animation_data.h" />
     <ClInclude Include="Src\lab1\gui_controls.h" />
     <ClInclude Include="Src\lab1\objects.h" />
     <ClInclude Include="Src\lab1\Scene.h" />

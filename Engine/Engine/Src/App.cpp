@@ -1,5 +1,4 @@
 ﻿#include "Application.h"
-#include "AssetRegistry.h"
 
 #include "gui_controls.h"
 #include "Scene.h"

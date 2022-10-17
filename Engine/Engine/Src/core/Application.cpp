@@ -72,7 +72,6 @@ void Aplication::Run()
 
         Renderer::Clear();
         if (Render != NULL) Render();
-        Renderer::DrawBatch();
 
         GUI::Clear();
         if (RenderGUI != NULL) RenderGUI();

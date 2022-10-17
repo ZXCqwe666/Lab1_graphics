@@ -8,6 +8,7 @@
 
 #include "glm/vec3.hpp"
 #include "glm/vec2.hpp"
+#include "Window.h"
 
 namespace rendering
 {
@@ -118,9 +119,43 @@ namespace rendering
 		Renderer::DrawTriangle(triangle0);
 	}
 
-	void Renderer::DrawCircle(const Circle& triangle)
+	void Renderer::DrawCircle(const Circle& circle)
 	{
-		
+		const glm::vec2 vertex_offsets[4] = { {-0.5f, -0.5}, {0.5f, -0.5}, {-0.5f, 0.5}, {0.5f, 0.5} };
+
+		glm::vec2 verts[6];
+		verts[0] = vertex_offsets[0] * circle.radius;
+		verts[1] = vertex_offsets[1] * circle.radius;
+		verts[2] = vertex_offsets[2] * circle.radius;
+		verts[3] = vertex_offsets[2] * circle.radius;
+		verts[4] = vertex_offsets[1] * circle.radius;
+		verts[5] = vertex_offsets[3] * circle.radius;
+
+		uint32_t va_id = 0;
+		GLCall(glGenVertexArrays(1, &va_id));
+		GLCall(glBindVertexArray(va_id));
+
+		uint32_t vb_id = 0;
+		GLCall(glGenBuffers(1, &vb_id));
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, vb_id));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(glm::vec2), verts, GL_STATIC_DRAW));
+
+		GLCall(glEnableVertexAttribArray(0));
+		GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (const void*)0));
+
+		glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3{ circle.origin.x, circle.origin.y, 0 });
+		shader_circle.Bind();
+		shader_circle.Set_Float2("u_origin", circle.origin);
+		shader_circle.Set_Float("u_radius", circle.radius);
+		shader_circle.Set_Float("u_fade", circle.fade);
+		shader_circle.Set_Float3("u_circleColor", circle.color);
+		shader_circle.Set_Float2("u_resolution", {Window::width, Window::height});
+		shader_circle.Set_Mat4_Float("u_MVP", Camera::Get_ProjectionView_Matrix() * model);
+
+		GLCall(glDrawArrays(GL_TRIANGLES, 0, 6));
+
+		GLCall(glDeleteVertexArrays(1, &va_id));
+		GLCall(glDeleteBuffers(1, &vb_id));
 	}
 
 	void Renderer::Clear()

@@ -118,4 +118,19 @@ namespace rendering
     {
         GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]));
     }
+
+    void Shader::Set_Float3(const std::string& name, const glm::vec3& value)
+    {
+        GLCall(glUniform3f(GetUniformLocation(name), value.x, value.y, value.z));
+    }
+
+    void Shader::Set_Float2(const std::string& name, const glm::vec2& value)
+    {
+        GLCall(glUniform2f(GetUniformLocation(name), value.x, value.y));
+    }
+
+    void Shader::Set_Float(const std::string& name, float value)
+    {
+        GLCall(glUniform1f(GetUniformLocation(name), value));
+    }
 }

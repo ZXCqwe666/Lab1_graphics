@@ -65,9 +65,9 @@ void Scene::RemoveQuad()
 
 void Scene::RenderScene()
 {
-	for (int i = 0; i < quadPool.size(); i++) 
+	for (int i = 0; i < trianglePool.size(); i++)
 	{
-		rendering::Renderer::DrawCircle(circlePool[i]);
+		rendering::Renderer::DrawTriangle(trianglePool[i]);
 	}
 
 	for (int i = 0; i < quadPool.size(); i++)
@@ -75,8 +75,8 @@ void Scene::RenderScene()
 		rendering::Renderer::DrawQuad(quadPool[i]);
 	}
 
-	for (int i = 0; i < trianglePool.size(); i++)
+	for (int i = 0; i < circlePool.size(); i++) 
 	{
-		rendering::Renderer::DrawTriangle(trianglePool[i]);
+		rendering::Renderer::DrawCircle(circlePool[i]);
 	}
 }

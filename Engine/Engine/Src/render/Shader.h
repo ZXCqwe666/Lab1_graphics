@@ -34,6 +34,9 @@ namespace rendering
 		void Unbind() const;
 
 		void Set_Mat4_Float(const std::string& name, const glm::mat4& matrix);
+		void Set_Float3(const std::string& name, const glm::vec3& value);
+		void Set_Float2(const std::string& name, const glm::vec2& value);
+		void Set_Float(const std::string& name, float value);
 
 	private:
 		ShaderProgramSource ParseShader(const std::string& filepath);

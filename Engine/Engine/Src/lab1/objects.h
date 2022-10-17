@@ -30,4 +30,5 @@ public:
 	glm::vec2 origin = { 0.0f, 0.0f };
 	glm::vec3 color = { 1.0f, 1.0f, 1.0f };
 	float radius = 50.0f;
+	float fade = 0.005f;
 };

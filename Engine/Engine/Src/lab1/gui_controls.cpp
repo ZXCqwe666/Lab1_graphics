@@ -25,8 +25,8 @@ void GUI_Controls::DrawGUI()
         Triangle triangle;
         triangle.origin = glm::vec2(0.0f);
         triangle.verts[0] = { {0, 0}, glm::vec3(1.0f) };
-        triangle.verts[1] = { {100, 0}, glm::vec3(1.0f) };
-        triangle.verts[2] = { {0, 100}, glm::vec3(1.0f) };
+        triangle.verts[1] = { {200, 0}, glm::vec3(1.0f) };
+        triangle.verts[2] = { {0, 200}, glm::vec3(1.0f) };
         Scene::AddTriangle(triangle);
     }
 
@@ -46,7 +46,7 @@ void GUI_Controls::DrawGUI()
         Quad quad;
         quad.origin = glm::vec2(0.0f);
         quad.color = glm::vec3(1.0f);
-        quad.size = 100;
+        quad.size = 200;
 
         Scene::AddQuad(quad);
     }
@@ -67,7 +67,8 @@ void GUI_Controls::DrawGUI()
         Circle circle;
         circle.origin = glm::vec2(0.0f);
         circle.color = glm::vec3(1.0f);
-        circle.radius = 50.0f;
+        circle.radius = 100.0f;
+        circle.fade = 0.005f;
         Scene::AddCircle(circle);
     }
 
@@ -147,6 +148,7 @@ void GUI_Controls::DrawGUI()
 
         ImGui::SliderFloat2("Origin ", glm::value_ptr(Scene::circlePool[Scene::selected_circle_id].origin), -2000.0f, 2000.0f);
         ImGui::SliderFloat("Radius", &Scene::circlePool[Scene::selected_circle_id].radius, 0, 1000);
+        ImGui::SliderFloat("Fade", &Scene::circlePool[Scene::selected_circle_id].fade, 0, 0.5f);
         ImGui::ColorEdit3("Color", glm::value_ptr(Scene::circlePool[Scene::selected_circle_id].color));
     }
 

@@ -17,7 +17,9 @@ namespace rendering
 
 	Vertex Renderer::vertices[max_verts];
 	Texture Renderer::texture;
-	Shader Renderer::shader;
+	Shader Renderer::shader_tex_quad;
+	Shader Renderer::shader_vcolor;
+	Shader Renderer::shader_circle;
 
 	uint32_t Renderer::vertexArrayID;
 	uint32_t Renderer::vertexBufferID;
@@ -30,7 +32,9 @@ namespace rendering
 		GLCall(glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f));
 
 		texture.LoadTexture(".\\Resources\\Textures\\Atlas.png");
-		shader.LoadShader(".\\Resources\\Shaders\\Quad.shader");
+		shader_tex_quad.LoadShader(".\\Resources\\Shaders\\Quad.shader");
+		shader_vcolor.LoadShader(".\\Resources\\Shaders\\VertColor.shader");
+		shader_circle.LoadShader(".\\Resources\\Shaders\\Circle.shader");
 
 		GLCall(glGenVertexArrays(1, &vertexArrayID));
 		GLCall(glBindVertexArray(vertexArrayID));
@@ -73,6 +77,52 @@ namespace rendering
 		GLCall(glDeleteBuffers(1, &indexBufferID));
 	}
 
+	void Renderer::DrawTriangle(const Triangle& triangle)
+	{
+		uint32_t va_id = 0;
+		GLCall(glGenVertexArrays(1, &va_id));
+		GLCall(glBindVertexArray(va_id));
+
+		uint32_t vb_id = 0;
+		GLCall(glGenBuffers(1, &vb_id));
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, vb_id));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(VertexColored), triangle.verts, GL_STATIC_DRAW));
+
+		GLCall(glEnableVertexAttribArray(0));
+		GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(VertexColored), (const void*)offsetof(VertexColored, position)));
+		GLCall(glEnableVertexAttribArray(1));
+		GLCall(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexColored), (const void*)offsetof(VertexColored, color)));
+
+		glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3{triangle.origin.x, triangle.origin.y, 0});
+		shader_vcolor.Bind();
+		shader_vcolor.Set_Mat4_Float("u_MVP", Camera::Get_ProjectionView_Matrix() * model);
+
+		GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
+
+		GLCall(glDeleteVertexArrays(1, &va_id));
+		GLCall(glDeleteBuffers(1, &vb_id));
+	}
+
+	void Renderer::DrawQuad(const Quad& quad)
+	{
+		const glm::vec2 vertex_offsets[4] = {{-0.5f, -0.5}, {0.5f, -0.5}, {-0.5f, 0.5}, {0.5f, 0.5}};
+
+		Triangle triangle0;
+		triangle0.origin = quad.origin;
+		triangle0.verts[0] = { vertex_offsets[0] * quad.size, quad.color };
+		triangle0.verts[1] = { vertex_offsets[1] * quad.size, quad.color };
+		triangle0.verts[2] = { vertex_offsets[2] * quad.size, quad.color };
+
+		Renderer::DrawTriangle(triangle0);
+		triangle0.verts[0] = { vertex_offsets[3] * quad.size, quad.color };
+		Renderer::DrawTriangle(triangle0);
+	}
+
+	void Renderer::DrawCircle(const Circle& triangle)
+	{
+		
+	}
+
 	void Renderer::Clear()
 	{
 		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
@@ -109,8 +159,8 @@ namespace rendering
 	{
 		if(quadCount == 0) return;
 
-		shader.Bind();
-		shader.Set_Mat4_Float("u_MVP", Camera::Get_ProjectionView_Matrix());
+		shader_tex_quad.Bind();
+		shader_tex_quad.Set_Mat4_Float("u_MVP", Camera::Get_ProjectionView_Matrix());
 
 		uint32_t size = 4 * quadCount * sizeof(rendering::Vertex);
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID));

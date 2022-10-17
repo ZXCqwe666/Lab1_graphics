@@ -17,6 +17,8 @@ public:
 	static void RemoveCircle();
 	static void RemoveQuad();
 
+	static void RenderScene();
+
 public:
 	static std::vector<Triangle> trianglePool;
 	static std::vector<Circle> circlePool;

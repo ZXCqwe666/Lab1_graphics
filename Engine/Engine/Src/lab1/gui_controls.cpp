@@ -1,10 +1,10 @@
 #include "gui_controls.h"
 
-#include <glm\gtc\type_ptr.hpp>
-
 #include "Scene.h"
 #include "Time.h"
 #include "GUI.h"
+
+#include <glm\gtc\type_ptr.hpp>
 
 void GUI_Controls::DrawGUI()
 {
@@ -24,9 +24,9 @@ void GUI_Controls::DrawGUI()
     {
         Triangle triangle;
         triangle.origin = glm::vec2(0.0f);
-        triangle.verts[0] = { {0, 0}, {1, 1, 1}};
-        triangle.verts[1] = { {100, 0}, {1, 1, 1} };
-        triangle.verts[2] = { {0, 100}, {1, 1, 1} };
+        triangle.verts[0] = { {0, 0}, glm::vec3(1.0f) };
+        triangle.verts[1] = { {100, 0}, glm::vec3(1.0f) };
+        triangle.verts[2] = { {0, 100}, glm::vec3(1.0f) };
         Scene::AddTriangle(triangle);
     }
 
@@ -39,37 +39,15 @@ void GUI_Controls::DrawGUI()
     max = max < 0 ? 0 : max;
     ImGui::SliderInt("Selected triangle", &Scene::selected_tringle_id, 0, max);
 
-    ImGui::Text("Circles created %i", Scene::circlePool.size());
-
-    if (ImGui::Button("AddCircle"))
-    {
-        Circle circle;
-        circle.origin = glm::vec2(0.0f);
-        circle.color = glm::vec3(0.0f);
-        circle.radius = 1.0f;
-        Scene::AddCircle(circle);
-    }
-
-    if (ImGui::Button("RemoveCircle"))
-    {
-        Scene::RemoveCircle();
-    }
-
-    max = Scene::circlePool.size() - 1;
-    max = max < 0 ? 0 : max;
-    ImGui::SliderInt("Selected circle", &Scene::selected_circle_id, 0, max);
-
     ImGui::Text("Quads created %i", Scene::quadPool.size());
 
     if (ImGui::Button("AddQuad"))
     {
         Quad quad;
         quad.origin = glm::vec2(0.0f);
-        quad.color = glm::vec3(0.0f);
-        quad.verts[0] = glm::vec2(0.0f, 0.0f);
-        quad.verts[1] = glm::vec2(0.5f, 0.0f);
-        quad.verts[2] = glm::vec2(0.5f, 0.5f);
-        quad.verts[3] = glm::vec2(0.0f, 0.5f);
+        quad.color = glm::vec3(1.0f);
+        quad.size = 100;
+
         Scene::AddQuad(quad);
     }
 
@@ -82,13 +60,55 @@ void GUI_Controls::DrawGUI()
     max = max < 0 ? 0 : max;
     ImGui::SliderInt("Selected quad", &Scene::selected_quad_id, 0, max);
 
+    ImGui::Text("Circles created %i", Scene::circlePool.size());
+
+    if (ImGui::Button("AddCircle"))
+    {
+        Circle circle;
+        circle.origin = glm::vec2(0.0f);
+        circle.color = glm::vec3(1.0f);
+        circle.radius = 50.0f;
+        Scene::AddCircle(circle);
+    }
+
+    if (ImGui::Button("RemoveCircle"))
+    {
+        Scene::RemoveCircle();
+    }
+
+    max = Scene::circlePool.size() - 1;
+    max = max < 0 ? 0 : max;
+    ImGui::SliderInt("Selected circle", &Scene::selected_circle_id, 0, max);
+
+    if (ImGui::Button("CLEAR ALL"))
+    {
+        while(Scene::trianglePool.size() > 0)
+        {
+            Scene::selected_tringle_id = Scene::trianglePool.size() - 1;
+            Scene::RemoveTriangle();
+        }
+
+        while (Scene::circlePool.size() > 0)
+        {
+            Scene::selected_circle_id = Scene::circlePool.size() - 1;
+            Scene::RemoveCircle();
+        }
+
+        while (Scene::quadPool.size() > 0)
+        {
+            Scene::selected_quad_id = Scene::quadPool.size() - 1;
+            Scene::RemoveQuad();
+        }
+    }
+
     ImGui::End();
 
     #pragma endregion
     #pragma region edit
 
-    ImGui::SetNextWindowSize(windowSize, ImGuiCond_Once);
-    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - 2 * windowSize.x, windowSize.y), ImGuiCond_Once, ImVec2(0.0f, 1.0f));
+    ImVec2 windowSizeEdit = { 350, 550 };
+    ImGui::SetNextWindowSize(windowSizeEdit, ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - windowSizeEdit.x, windowSizeEdit.y + windowSize.y), ImGuiCond_Once, ImVec2(0.0f, 1.0f));
 
     ImGui::Begin("Edit");
     ImGui::Text("EDIT SHAPES :");
@@ -108,6 +128,17 @@ void GUI_Controls::DrawGUI()
         ImGui::ColorEdit3("VertColor 2", glm::value_ptr(Scene::trianglePool[Scene::selected_tringle_id].verts[2].color));
     }
 
+    if (Scene::quadPool.size() > 0)
+    {
+        ImGui::Spacing();
+        ImGui::Text("QUAD :");
+        ImGui::Spacing();
+
+        ImGui::SliderFloat2("Origin  ", glm::value_ptr(Scene::quadPool[Scene::selected_quad_id].origin), -2000.0f, 2000.0f);
+        ImGui::ColorEdit3("Color ", glm::value_ptr(Scene::quadPool[Scene::selected_quad_id].color));
+        ImGui::SliderFloat("Size", &Scene::quadPool[Scene::selected_quad_id].size, 0, 1000);
+    }
+
     if (Scene::circlePool.size() > 0)
     {
         ImGui::Spacing();
@@ -119,19 +150,6 @@ void GUI_Controls::DrawGUI()
         ImGui::ColorEdit3("Color", glm::value_ptr(Scene::circlePool[Scene::selected_circle_id].color));
     }
 
-    if (Scene::quadPool.size() > 0)
-    {
-        ImGui::Spacing();
-        ImGui::Text("QUAD :");
-        ImGui::Spacing();
-
-        ImGui::SliderFloat2("Origin  ", glm::value_ptr(Scene::quadPool[Scene::selected_quad_id].origin), -2000.0f, 2000.0f);
-        ImGui::ColorEdit3("Color ", glm::value_ptr(Scene::quadPool[Scene::selected_quad_id].color));
-        ImGui::SliderFloat2("VertPos 0 ", glm::value_ptr(Scene::quadPool[Scene::selected_quad_id].verts[0]), -500.f, 500);
-        ImGui::SliderFloat2("VertPos 1 ", glm::value_ptr(Scene::quadPool[Scene::selected_quad_id].verts[1]), -500.f, 500);
-        ImGui::SliderFloat2("VertPos 2 ", glm::value_ptr(Scene::quadPool[Scene::selected_quad_id].verts[2]), -500.f, 500);
-        ImGui::SliderFloat2("VertPos 3 ", glm::value_ptr(Scene::quadPool[Scene::selected_quad_id].verts[3]), -500.f, 500);
-    }
 
     ImGui::End();
 

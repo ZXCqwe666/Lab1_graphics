@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "Renderer.h"
 
 std::vector<Triangle> Scene::trianglePool;
 std::vector<Circle> Scene::circlePool;
@@ -34,11 +35,8 @@ void Scene::RemoveTriangle()
 		trianglePool.pop_back();
 	}
 	
-	if (selected_tringle_id >= trianglePool.size())
-		selected_tringle_id--;
-
-	if (selected_tringle_id < 0)
-		selected_tringle_id = 0;
+	if (selected_tringle_id >= trianglePool.size()) selected_tringle_id--;
+	if (selected_tringle_id < 0) selected_tringle_id = 0;
 }
 
 void Scene::RemoveCircle()
@@ -49,11 +47,8 @@ void Scene::RemoveCircle()
 		circlePool.pop_back();
 	}
 
-	if (selected_circle_id >= circlePool.size())
-		selected_circle_id--;
-
-	if (selected_circle_id < 0)
-		selected_circle_id = 0;
+	if (selected_circle_id >= circlePool.size()) selected_circle_id--;
+	if (selected_circle_id < 0) selected_circle_id = 0;
 }
 
 void Scene::RemoveQuad()
@@ -64,9 +59,24 @@ void Scene::RemoveQuad()
 		quadPool.pop_back();
 	}
 
-	if (selected_quad_id >= quadPool.size())
-		selected_quad_id--;
+	if (selected_quad_id >= quadPool.size()) selected_quad_id--;
+	if (selected_quad_id < 0) selected_quad_id = 0;
+}
 
-	if(selected_quad_id < 0) 
-		selected_quad_id = 0;
+void Scene::RenderScene()
+{
+	for (int i = 0; i < quadPool.size(); i++) 
+	{
+		rendering::Renderer::DrawCircle(circlePool[i]);
+	}
+
+	for (int i = 0; i < quadPool.size(); i++)
+	{
+		rendering::Renderer::DrawQuad(quadPool[i]);
+	}
+
+	for (int i = 0; i < trianglePool.size(); i++)
+	{
+		rendering::Renderer::DrawTriangle(trianglePool[i]);
+	}
 }
